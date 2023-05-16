@@ -8,15 +8,23 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData tema = ThemeData();
     return MaterialApp(
       title: 'Vamos Cozinhar?',
-      theme: tema.copyWith(
-        colorScheme: tema.colorScheme.copyWith(
-          primary: Colors.blue,
-          secondary: const Color.fromARGB(255, 111, 180, 236)
-        )
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSwatch().copyWith(
+          primary: Colors.pink,
+          secondary: Colors.amber
+        ),
+        canvasColor: const Color.fromRGBO(255, 254, 229, 1),
+        fontFamily: 'Raleway',
+        textTheme: ThemeData.light().textTheme.copyWith(
+              titleLarge: const TextStyle(
+                fontSize: 20,
+                fontFamily: 'RobotoCondensed',
+              ),
+            ),
       ),
+      
       home: const CategoriesScreen(),
     );
   }
