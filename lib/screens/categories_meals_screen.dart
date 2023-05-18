@@ -18,8 +18,8 @@ class CategoriesMealsScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Receitas'
+        title: Text(
+          category.title!
         ),
       ),
       body: Center(

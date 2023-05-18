@@ -20,8 +20,8 @@ class MyApp extends StatelessWidget {
       title: 'Vamos Cozinhar?',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSwatch().copyWith(
-          primary: Colors.pink,
-          secondary: Colors.amber
+          primary: Colors.lightGreen,
+          secondary: Colors.blue
         ),
         canvasColor: const Color.fromRGBO(255, 254, 229, 1),
         fontFamily: 'Raleway',
@@ -36,6 +36,11 @@ class MyApp extends StatelessWidget {
         AppRoutes.HOME: (context) => const CategoriesScreen(),
         AppRoutes.CATEGORIES_MEALS: (context) => const CategoriesMealsScreen(),
         AppRoutes.MEAL_DETAIL:(context) => const MealDetailScreen()
+      },
+      onGenerateRoute: (settings) {
+        return MaterialPageRoute(
+          builder: (_) => const CategoriesScreen()
+        );
       },
     );
   }
