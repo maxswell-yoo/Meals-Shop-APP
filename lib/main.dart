@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:meals/data/dummy_data.dart';
+import 'package:meals/models/settings.dart';
 import 'package:meals/screens/categories_meals_screen.dart';
 import 'package:meals/screens/meal_detail_screen.dart';
 import 'package:meals/screens/settings_screen.dart';
@@ -23,8 +24,35 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
+  Settings settings = Settings();
   List<Meal> _availableMeals = DUMMY_MEALS;
+  List<Meal> _favoriteMeals = [];
+
+  void _filterMeals(Settings settings) {
+    setState(() {
+      this.settings = settings;
+      _availableMeals = DUMMY_MEALS.where((meal) {
+          final filterGluten = settings.isGlutenFree! && !meal.isGlutenFree!;
+          final filterLactose = settings.isLactoseFree! && !meal.isLactoseFree!;
+          final filterVegan = settings.isVegan! && !meal.isVegan!;
+          final filterVegetarian = settings.isVegetarian! && !meal.isVegetarian!;
+          return !filterGluten && !filterLactose && !filterVegan && !filterVegetarian;
+
+      }).toList();
+    });
+  }
+
+  void _toggleFavorite(Meal meal) {
+    setState(() {
+      _favoriteMeals.contains(meal) 
+      ? _favoriteMeals.remove(meal) 
+      : _favoriteMeals.add(meal);
+    });
+  }
+
+  bool _isFavorite(Meal meal) {
+    return _favoriteMeals.contains(meal);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,10 +73,10 @@ class _MyAppState extends State<MyApp> {
             ),
       ),
       routes: {
-        AppRoutes.HOME: (context) => const TabsScreen(),
+        AppRoutes.HOME: (context) => TabsScreen(_favoriteMeals),
         AppRoutes.CATEGORIES_MEALS: (context) => CategoriesMealsScreen(_availableMeals),
-        AppRoutes.MEAL_DETAIL:(context) => const MealDetailScreen(),
-        AppRoutes.SETTINGS:(context) => const SettingsScreen()
+        AppRoutes.MEAL_DETAIL: (context) => MealDetailScreen(_toggleFavorite, _isFavorite),
+        AppRoutes.SETTINGS: (context) => SettingsScreen(settings, _filterMeals)
       },
       onGenerateRoute: (settings) {
         return MaterialPageRoute(
